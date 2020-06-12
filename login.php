@@ -1,25 +1,33 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
-    <meta charset="UTF-8">
-    <title>登录</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>曹飞Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
 </head>
 <body>
-<form action="" method="post">
-    用户名:<label>
-        <input type="text" name="username">
-    </label>
-    密码:<label>
-        <input type="password" name="password">
-    </label>
-    <input type="submit" name="submit" value="登录">
-</form>
+<script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+<div class="login-input-table">
+    <form action="" method="post">
+        <label for="username">用户名
+        <input type="text" class="form-control" name="username" placeholder="请输入用户名">
+        </label>
+        <label for="password">密码
+            <input type="password" class="form-control" name="password" placeholder="请输入密码">
+        </label>
+        <button name="submit" type="submit" class="btn btn-default">登录</button>
+    </form>
+</div>
 </body>
 </html>
 <?php
-require "config.php";
-session_start();
-$_SESSION["islogin"]=FALSE;
+include ("include/common.php");
+$_SESSION["isLogin"]=FALSE;
 
 function login($username,$password){
     global $conn;
@@ -42,13 +50,15 @@ function login($username,$password){
 
 function startlogin($username,$password){
     if (login($username,$password) == TRUE){
-        echo "登陆成功，即将跳转到首页\n";
+        $_SESSION["isLogin"]=TRUE;
+        echo "<div class=\"alert alert-success\" role=\"alert\"><p>登陆成功，即将跳转到首页</p></div>";
         echo "<script>
                 setTimeout(\"javascript:location.href='index.php'\", 1000);
               </script>";
     }
     else{
-        echo "登陆失败，用户名或密码错误\n";
+        $_SESSION["isLogin"]=FALSE;
+        echo "<div class=\"alert alert-danger\" role=\"alert\"><p>用户名或密码不正确</p></div>";
     }
 }
 
@@ -59,17 +69,14 @@ function getuserpermission($username){
 }
 
 //Click the login bottom
-if ($_POST['submit']) {
-    $username = $_POST["username"];
-    $password = $_POST["password"];
-    if (($username=="") or ($password=="")){
-        echo "用户名或密码不能为空\n";
+if (isset($_POST['submit'])) {
+    if (isset($_POST["username"]) or isset($_POST["password"])){
+        startlogin($_POST["username"], $_POST["password"]);
+        $_SESSION["username"]=$_POST["username"];
+        $_SESSION["permission"]=getuserpermission($_POST["username"]);
     }
     else{
-        startlogin($username, $password);
-        $islogin=TRUE;
-        $_SESSION["username"]=$username;
-        $_SESSION["islogin"]=TRUE;
-        $_SESSION["permission"]=getuserpermission($username);
+
+        echo "<div class=\"alert alert-danger\" role=\"alert\"><p>用户名或密码不能为空</p></div>";
     }
 }
