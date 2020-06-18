@@ -3,6 +3,9 @@
 $servername = "localhost";
 $username = "root";
 $password = "123456";
-$dbname = "root";
+$dbname = "cflogin";
 $conn = mysqli_connect($servername, $username, $password, $dbname);
+
+//Website Name
+$sitename="CF";
 ?>

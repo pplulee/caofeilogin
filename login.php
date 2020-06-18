@@ -1,16 +1,22 @@
 <?php
-include ("include/header.php");
-$_SESSION["isLogin"]=FALSE;
+include ("header.php");
+
+//If user is already login, exit this page
+if (isset($_SESSION["isLogin"]) AND $_SESSION["isLogin"]==TRUE){
+    echo "<div class='alert alert-success' role='alert'><p>你已经登录了，即将跳转到首页</p></div>";
+    echo "<script>
+                setTimeout(\"javascript:location.href='index.php'\", 1000);
+              </script>";
+    exit;
+}
 
 function login($username,$password){
     global $conn;
-    $result = mysqli_query($conn, "SELECT username FROM user WHERE username='".$username."';");
-    if (mysqli_num_rows($result) == 0){
+    if (mysqli_num_rows(mysqli_query($conn, "SELECT username FROM user WHERE username='".$username."';")) == 0){
         return FALSE;
     }
     else{
-        $result = mysqli_query($conn, "SELECT password FROM user WHERE username='".$username."';");
-        if (mysqli_fetch_assoc($result)["password"] == $password){
+        if (mysqli_fetch_assoc(mysqli_query($conn, "SELECT password FROM user WHERE username='".$username."';"))["password"] == $password){
             return TRUE;
         }
         else{
@@ -44,9 +50,9 @@ if (isset($_POST['submit'])) {
         startlogin($_POST["username"], $_POST["password"]);
         $_SESSION["username"]=$_POST["username"];
         $_SESSION["permission"]=getuserpermission($_POST["username"]);
+        $_SESSION["userid"]=mysqli_fetch_assoc(mysqli_query($conn, "SELECT userid FROM user WHERE username='".$_POST["username"]."';"))["userid"];
     }
     else{
-
         echo "<div class='alert alert-danger' role='alert'><p>用户名或密码不能为空</p></div>";
     }
 }

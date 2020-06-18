@@ -53,6 +53,7 @@ function GetUserInfo($id){
         echo "<script>
                 setTimeout(\"javascript:location.href='user.php'\", 1000);
               </script>";
+        exit;
     }
 }
 

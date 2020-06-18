@@ -1,5 +1,5 @@
 <?php
-include ("./header.php");
+include ("header.php");
 ?>
 
 <div class="container" style="padding-top:70px;">

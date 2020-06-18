@@ -1,5 +1,5 @@
 <?php
-include ("include/header.php");
+include ("header.php");
 if (!$conn){
     echo "<div class=\"alert alert-danger\" role=\"alert\"><h3>警告：MySQL连接失败</h3></div>";
     exit;

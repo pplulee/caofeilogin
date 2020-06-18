@@ -1,5 +1,5 @@
 <?php
-include ("./header.php");
+include ("header.php");
 ?>
 <div class="panel panel-info">
     <div class="panel-heading">
